@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-pink-50: hsl(326 67% 96%);
+  --color-pink-100: hsl(326 67% 90%);
+  --color-pink-200: hsl(326 60% 84%);
+  --color-pink-300: hsl(326 55% 76%);
+
+  --color-lavender-50: hsl(262 45% 92%);
+  --color-lavender-100: hsl(262 45% 80%);
+  --color-lavender-200: hsl(262 40% 70%);
+  --color-lavender-300: hsl(262 35% 60%);
+
+  --color-grayish-50: hsl(240 3% 94%);
+  --color-grayish-100: hsl(240 3% 80%);
+  --color-grayish-200: hsl(240 3% 65%);
+  --color-grayish-300: hsl(240 3% 56%);
+  --color-grayish-400: hsl(240 3% 40%);
+}
+
+@layer base {
+  html {
+    font-family: "Noto Sans", sans-serif;
+    letter-spacing: 0.1em;
+  }
+}
