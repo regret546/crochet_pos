@@ -31,7 +31,7 @@ const seedData = async () => {
     // Dummy admin user
     const adminUser = {
       username: "admin",
-      password: "1234", // (we’ll hash later)
+      password: "1234", 
     };
 
     await Users.create(adminUser);
