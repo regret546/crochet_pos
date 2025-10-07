@@ -1,5 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   --color-pink-50: hsl(326 67% 96%);
@@ -23,5 +26,34 @@
   html {
     font-family: "Noto Sans", sans-serif;
     letter-spacing: 0.1em;
+  }
+
+  .input-box {
+    @apply relative grid items-center;
+  }
+
+  .input-box {
+    input {
+      @apply focus:outline-none p-2 rounded-full ring-2 ring-white;
+    }
+  }
+  .record-input {
+    @apply focus:outline-none p-2 rounded-full ring-2 ring-white;
+  }
+
+  .global-button {
+    @apply grid p-2 m-2 bg-white text-black cursor-pointer rounded-full shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] hover:opacity-80;
+  }
+
+  .sales-table {
+    th {
+      @apply px-6 py-3;
+    }
+  }
+
+  .sales-table {
+    td {
+      @apply px-6 py-3;
+    }
   }
 }

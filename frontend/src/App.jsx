@@ -1,12 +1,23 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from "react";
+import Login from "./pages/Login";
+import Sales from "./pages/Sales";
+import Dashboard from "./pages/Dashboard";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import "./App.css";
 
 function App() {
   return (
-    <>
-    <div className=" h-[100vh] w-[100%] bg-pink-300"> </div>
-    </>
-  )
+    <Router>
+      <div className="h-[100vh] grid place-items-center w-[100%] bg-[url('./assets/crochet.jpg')] bg-cover bg-center">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/sales" element={<Sales />} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;
