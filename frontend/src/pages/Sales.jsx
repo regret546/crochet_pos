@@ -91,126 +91,128 @@ function Sales() {
     }
   };
   return (
-    <div className="grid place-items-center bg-purple-200 text-white rounded-lg p-4">
-      <h2 className="my-[2rem]">Record a Sale</h2>
-      <form className="grid gap-4" onSubmit={handleAddSale}>
-        <input
-          className="record-input"
-          type="text"
-          placeholder="Item Name"
-          value={itemName}
-          onChange={(e) => setItemName(e.target.value)}
-        />
-        <input
-          className="record-input"
-          type="number"
-          placeholder="Quantity"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-        />
-        <input
-          className="record-input"
-          type="number"
-          placeholder="Price"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-        />
+    <div className="w-full bg-purple-200 text-white">
+      <div className="grid justify-center w-full">
+        <h2 className="my-[2rem]">Record a Sale</h2>
+        <form className="grid gap-4" onSubmit={handleAddSale}>
+          <input
+            className="record-input"
+            type="text"
+            placeholder="Item Name"
+            value={itemName}
+            onChange={(e) => setItemName(e.target.value)}
+          />
+          <input
+            className="record-input"
+            type="number"
+            placeholder="Quantity"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+          />
+          <input
+            className="record-input"
+            type="number"
+            placeholder="Price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
 
-        <button className="global-button" type="submit">
-          {loading ? "Saving..." : "Add Sale"}
-        </button>
-      </form>
+          <button className="global-button" type="submit">
+            {loading ? "Saving..." : "Add Sale"}
+          </button>
+        </form>
 
-      <h3>Sales History</h3>
-      <div className="sales-table overflow-x-auto border-2 mt-2">
-        <table className="border-separate border-spacing-y-4">
-          <thead>
-            <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Category</th>
-              <th scope="col">Price</th>
-              <th scope="col">ID</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sales.map((s, i) => (
-              <tr key={i}>
-                <td>{s.itemName}</td>
-                <td>{s.quantity}</td>
-                <td>{s.price}</td>
-                <td>{s.total}</td>
-                <td>
-                  <div className="flex gap-4">
-                    <i
-                      onClick={() => handleDelete(s._id)}
-                      className="text-red-300 fa-solid fa-trash cursor-pointer"
-                    ></i>
-                    <i
-                      onClick={() => {
-                        toggleModal();
-                        fetchSpecificSales(s._id);
-                      }}
-                      className="text-blue-300 fa-solid fa-pen cursor-pointer"
-                    ></i>
-                  </div>
-                </td>
+        <h3 className="text-center mt-4">Sales History</h3>
+        <div className="sales-table overflow-x-auto border-2 mt-2 ">
+          <table className="border-separate border-spacing-y-4 w-full">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Total</th>
+                <th scope="col">ID</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {sales.map((s, i) => (
+                <tr key={i}>
+                  <td>{s.itemName}</td>
+                  <td>{s.quantity}</td>
+                  <td>{s.price}</td>
+                  <td>{s.total}</td>
+                  <td>
+                    <div className="flex gap-4">
+                      <i
+                        onClick={() => handleDelete(s._id)}
+                        className="text-red-300 fa-solid fa-trash cursor-pointer"
+                      ></i>
+                      <i
+                        onClick={() => {
+                          toggleModal();
+                          fetchSpecificSales(s._id);
+                        }}
+                        className="text-blue-300 fa-solid fa-pen cursor-pointer"
+                      ></i>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-        {modal && (
-          <div className="modal">
-            <div className="fixed inset-0 grid place-items-center bg-purple-500">
-              <div className="relative text-center grid w-[300px] bg-gray-200 p-4">
-                <h2 className="my-[2rem]">Record a Sale</h2>
-                <form
-                  className="grid gap-4 "
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleUpdate(selectedSale._id, {
-                      itemName,
-                      quantity,
-                      price,
-                    });
-                  }}
-                >
-                  <input
-                    className="record-input"
-                    type="text"
-                    placeholder="Item Name"
-                    value={itemName}
-                    onChange={(e) => setItemName(e.target.value)}
-                  />
-                  <input
-                    className="record-input"
-                    type="number"
-                    placeholder="Price"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                  />
-                  <input
-                    className="record-input"
-                    type="number"
-                    placeholder="Quantity"
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
-                  />
-                  <button className="global-button" type="submit">
-                    {loading ? "Saving..." : "Update Sale"}
-                  </button>
-                </form>
-                <div
-                  onClick={toggleModal}
-                  className="global-button bg-red-400 text-white"
-                >
-                  Close
+          {modal && (
+            <div className="modal">
+              <div className="fixed inset-0 grid place-items-center bg-purple-500">
+                <div className="relative text-center grid w-[300px] bg-gray-200 p-4">
+                  <h2 className="my-[2rem]">Record a Sale</h2>
+                  <form
+                    className="grid gap-4 "
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleUpdate(selectedSale._id, {
+                        itemName,
+                        quantity,
+                        price,
+                      });
+                    }}
+                  >
+                    <input
+                      className="record-input"
+                      type="text"
+                      placeholder="Item Name"
+                      value={itemName}
+                      onChange={(e) => setItemName(e.target.value)}
+                    />
+                    <input
+                      className="record-input"
+                      type="number"
+                      placeholder="Price"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                    />
+                    <input
+                      className="record-input"
+                      type="number"
+                      placeholder="Quantity"
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                    />
+                    <button className="global-button" type="submit">
+                      {loading ? "Saving..." : "Update Sale"}
+                    </button>
+                  </form>
+                  <div
+                    onClick={toggleModal}
+                    className="global-button bg-red-400 text-white"
+                  >
+                    Close
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
