@@ -5,14 +5,14 @@ import Sales from "./Sales";
 
 export default function Dashboard() {
   return (
-    <div className="flex bg-indigo-red-500">
+    <motion.div layout className="flex bg-red-500">
       <div>
         {" "}
         <Sidebar />
         <ExampleContent />
       </div>
       <Sales />
-    </div>
+    </motion.div>
   );
 }
 
@@ -38,6 +38,14 @@ const Sidebar = () => {
         <Option
           Icon={<i className="fa-solid fa-dollar-sign"></i>}
           title="Sales"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+        />
+
+        <Option
+          Icon={<i className="fa-solid fa-right-from-bracket"></i>}
+          title="Logout"
           selected={selected}
           setSelected={setSelected}
           open={open}
