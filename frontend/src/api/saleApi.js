@@ -1,9 +1,7 @@
 import axios from "axios";
 
 const API_URL_SALES = "http://localhost:5000/api/sales";
-const API_URL_CATEGORY = "http://localhost:5000/api/category";
 
-/* Sales */
 export const getSales = async () => {
   const res = await axios.get(API_URL_SALES);
   return res.data;

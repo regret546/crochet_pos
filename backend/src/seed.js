@@ -3,6 +3,7 @@ const path = require("path");
 const dotenv = require("dotenv");
 const Sales = require("./models/Sales.js");
 const Users = require("./models/Users.js");
+const Category = require("./models/Category.js");
 
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
@@ -13,7 +14,22 @@ mongoose
 
 const seedData = async () => {
   try {
-    // Clear existing data
+    /*  For category seed */
+    const categories = [
+      { name: "Yarn" },
+      { name: "Hooks" },
+      { name: "Patterns" },
+      { name: "Accessories" },
+    ];
+
+    // 🧹 Clear existing
+    await Category.deleteMany();
+
+    // 🌾 Insert new
+    await Category.insertMany(categories);
+
+    /* For sales and user seed */
+    /* // Clear existing data
     await Sales.deleteMany();
     await Users.deleteMany();
 
@@ -35,7 +51,7 @@ const seedData = async () => {
     };
 
     await Users.create(adminUser);
-    console.log("✅ Admin user created (username: admin, password: 1234)");
+    console.log("✅ Admin user created (username: admin, password: 1234)"); */
 
     process.exit();
   } catch (err) {

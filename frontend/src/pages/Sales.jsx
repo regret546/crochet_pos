@@ -138,7 +138,6 @@ function Sales() {
                       ></i>
                       <i
                         onClick={() => {
-                          e.preventDefault();
                           setModalMode("edit");
                           toggleModal();
                           fetchSpecificSales(s._id);
@@ -197,7 +196,8 @@ function Sales() {
                       onChange={(e) => setQuantity(e.target.value)}
                     />
                     <button className="global-button" type="submit">
-                      {loading ? "Saving..." : "Update Sale"}
+                      {modalMode === "add" ? "Add" : "Update"}
+                      {loading && "Saving..."}
                     </button>
                   </form>
                   <div

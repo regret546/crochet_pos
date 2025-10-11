@@ -18,7 +18,6 @@ router.get("/", async (req, res) => {
 
 // @desc   Get specific new sale
 // @route   POST /api/sales/:id
-
 router.get("/:id", async (req, res) => {
   try {
     const sales = await Sale.findById(req.params.id);
@@ -48,9 +47,7 @@ router.post("/", async (req, res) => {
 
 // @desc   Update a sale
 // @route  PUT /api/sales/:id
-
 router.put("/:id", async (req, res) => {
-  console.log("🟡 Update request:", req.params.id, req.body);
   try {
     const { itemName, quantity, price } = req.body;
     const total = quantity * price;
