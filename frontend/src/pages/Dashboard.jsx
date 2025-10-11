@@ -1,35 +1,39 @@
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
+import Home from "./Home";
 import Sales from "./Sales";
 
 export default function Dashboard() {
+  const [selected, setSelected] = useState("Home");
   return (
-    <motion.div layout className="flex bg-red-500">
+    <motion.div layout className="flex bg-gray-700">
       <div>
         {" "}
-        <Sidebar />
+        <Sidebar selected={selected} setSelected={setSelected} />
         <ExampleContent />
       </div>
-      <Sales />
+      {selected === "Home" && <Home />}
+      {selected === "Sales" && <Sales />}
     </motion.div>
   );
 }
 
-const Sidebar = () => {
+const Sidebar = ({ selected, setSelected }) => {
   const [open, setOpen] = useState(true);
-  const [selected, setSelected] = useState("Dashboard");
+
   return (
     <motion.nav
       layout
-      className="sticky top-0 h-screen shrink-0 broder-r border-slate-300 bg-pink-200"
+      className="sticky top-0 h-screen shrink-0 border-r border-slate-300 bg-gray-700"
       style={{ width: open ? "225px" : "fit-content" }}
     >
       <TitleSection open={open} />
+
       <div className="space-y-1">
         <Option
           Icon={<i className="fa-solid fa-house"></i>}
-          title="Dashboard"
+          title="Home"
           selected={selected}
           setSelected={setSelected}
           open={open}
@@ -44,6 +48,14 @@ const Sidebar = () => {
         />
 
         <Option
+          Icon={<i className="fa-solid fa-table"></i>}
+          title="Category"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+        />
+
+        <Option
           Icon={<i className="fa-solid fa-right-from-bracket"></i>}
           title="Logout"
           selected={selected}
@@ -51,6 +63,7 @@ const Sidebar = () => {
           open={open}
         />
       </div>
+
       <ToggleClose open={open} setOpen={setOpen} />
     </motion.nav>
   );
@@ -60,10 +73,8 @@ const Option = ({ Icon, title, selected, setSelected, open }) => (
   <motion.button
     layout
     onClick={() => setSelected(title)}
-    className={`relative flex h-10 w-full items-center rounded-md cursor-pointer transition-colors ${
-      selected === title
-        ? "bg-indigo-100 text-indigo-800"
-        : "text-slate-500 hover:bg-slate-100"
+    className={`relative flex h-10 w-full items-center rounded-md cursor-pointer transition-colors text-white ${
+      selected === title ? "bg-pink-600 " : "hover:bg-white hover:text-black"
     }`}
   >
     <motion.div layout className="p-4">

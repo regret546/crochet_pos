@@ -16,6 +16,13 @@ function Sales() {
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState(false);
   const [selectedSale, setSelectedSale] = useState(null);
+  const [modalMode, setModalMode] = useState("");
+
+  const resetField = () => {
+    setItemName("");
+    setPrice("");
+    setQuantity("");
+  };
 
   useEffect(() => {
     fetchSales();
@@ -46,8 +53,7 @@ function Sales() {
     }
   };
 
-  const handleAddSale = async (e) => {
-    e.preventDefault();
+  const handleAddSale = async () => {
     if (!itemName || !price || !quantity) return alert("Fill all fields");
     setLoading(true);
     try {
@@ -56,11 +62,9 @@ function Sales() {
         price: Number(price),
         quantity: Number(quantity),
       });
-      // Add new sale to the top of the list
+
       setSales([newSale, ...sales]);
-      setItemName("");
-      setPrice("");
-      setQuantity("");
+      toggleModal();
     } catch (err) {
       console.error("❌ Failed to add sale:", err);
     } finally {
@@ -91,36 +95,21 @@ function Sales() {
     }
   };
   return (
-    <div className="w-full bg-purple-200 text-white">
+    <div className="w-full bg-slate-300 text-white">
       <div className="grid justify-center w-full">
         <h2 className="my-[2rem]">Record a Sale</h2>
-        <form className="grid gap-4" onSubmit={handleAddSale}>
-          <input
-            className="record-input"
-            type="text"
-            placeholder="Item Name"
-            value={itemName}
-            onChange={(e) => setItemName(e.target.value)}
-          />
-          <input
-            className="record-input"
-            type="number"
-            placeholder="Quantity"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-          />
-          <input
-            className="record-input"
-            type="number"
-            placeholder="Price"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
 
-          <button className="global-button" type="submit">
-            {loading ? "Saving..." : "Add Sale"}
-          </button>
-        </form>
+        <button
+          onClick={() => {
+            resetField();
+            setModalMode("add");
+            toggleModal();
+          }}
+          className="global-button"
+          type="submit"
+        >
+          Add Sale
+        </button>
 
         <h3 className="text-center mt-4">Sales History</h3>
         <div className="sales-table overflow-x-auto border-2 mt-2 ">
@@ -149,6 +138,8 @@ function Sales() {
                       ></i>
                       <i
                         onClick={() => {
+                          e.preventDefault();
+                          setModalMode("edit");
                           toggleModal();
                           fetchSpecificSales(s._id);
                         }}
@@ -161,20 +152,27 @@ function Sales() {
             </tbody>
           </table>
 
+          {/*  Update/Add modal sale */}
           {modal && (
             <div className="modal">
               <div className="fixed inset-0 grid place-items-center bg-purple-500">
                 <div className="relative text-center grid w-[300px] bg-gray-200 p-4">
-                  <h2 className="my-[2rem]">Record a Sale</h2>
+                  <h2 className="my-[2rem]">
+                    {modalMode === "add" ? "Add" : "Edit"} a Sale
+                  </h2>
                   <form
                     className="grid gap-4 "
                     onSubmit={(e) => {
                       e.preventDefault();
-                      handleUpdate(selectedSale._id, {
-                        itemName,
-                        quantity,
-                        price,
-                      });
+                      {
+                        modalMode === "add"
+                          ? handleAddSale()
+                          : handleUpdate(selectedSale._id, {
+                              itemName,
+                              quantity,
+                              price,
+                            });
+                      }
                     }}
                   >
                     <input
