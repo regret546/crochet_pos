@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import Home from "./Home";
 import Sales from "./Sales";
+import Category from "./Category";
 
 export default function Dashboard() {
   const [selected, setSelected] = useState("Home");
@@ -15,6 +16,7 @@ export default function Dashboard() {
       </div>
       {selected === "Home" && <Home />}
       {selected === "Sales" && <Sales />}
+      {selected === "Category" && <Category />}
     </motion.div>
   );
 }
@@ -25,7 +27,7 @@ const Sidebar = ({ selected, setSelected }) => {
   return (
     <motion.nav
       layout
-      className="sticky top-0 h-screen shrink-0 border-r border-slate-300 bg-gray-700"
+      className="sticky top-0 h-screen shrink-0 bg-gray-700"
       style={{ width: open ? "225px" : "fit-content" }}
     >
       <TitleSection open={open} />

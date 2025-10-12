@@ -6,7 +6,7 @@ import {
   deleteSale,
   updateSale,
 } from "../api/saleApi";
-import Modal from "../components/Modal";
+import { confirmDelete } from "../utils";
 
 function Sales() {
   const [itemName, setItemName] = useState("");
@@ -37,7 +37,7 @@ function Sales() {
       const data = await getSales();
       setSales(data);
     } catch (err) {
-      console.error("❌ Failed to load sales:", err);
+      console.error("Failed to load sales:", err);
     }
   };
 
@@ -49,7 +49,7 @@ function Sales() {
       setPrice(data.price);
       setQuantity(data.quantity);
     } catch (err) {
-      console.error("❌ Failed to load sales:", err);
+      console.error("Failed to load sales:", err);
     }
   };
 
@@ -66,16 +66,17 @@ function Sales() {
       setSales([newSale, ...sales]);
       toggleModal();
     } catch (err) {
-      console.error("❌ Failed to add sale:", err);
+      console.error("Failed to add sale:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this sale?")) return;
-    await deleteSale(id);
-    fetchSales();
+  const handleDeleteSales = async (id) => {
+    await confirmDelete(async () => {
+      await deleteSale(id);
+      fetchSales();
+    }, "sale");
   };
 
   const handleUpdate = async (id) => {
@@ -90,7 +91,7 @@ function Sales() {
       setLoading(false);
       toggleModal();
     } catch (err) {
-      console.error("❌ Update failed:", err);
+      console.error("Update failed:", err);
       setLoading(false);
     }
   };
@@ -133,7 +134,7 @@ function Sales() {
                   <td>
                     <div className="flex gap-4">
                       <i
-                        onClick={() => handleDelete(s._id)}
+                        onClick={() => handleDeleteSales(s._id)}
                         className="text-red-300 fa-solid fa-trash cursor-pointer"
                       ></i>
                       <i
