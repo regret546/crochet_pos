@@ -6,12 +6,15 @@ import {
   deleteSale,
   updateSale,
 } from "../api/saleApi";
-import { confirmDelete } from "../utils";
+import { getCategory, getSpecificCategory } from "../api/categoryApi";
+import { confirmDelete, capitalizeFirstWord } from "../utils";
 
 function Sales() {
   const [itemName, setItemName] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState("");
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState(false);
@@ -26,6 +29,7 @@ function Sales() {
 
   useEffect(() => {
     fetchSales();
+    fetchCategory();
   }, []);
 
   const toggleModal = () => {
@@ -41,6 +45,14 @@ function Sales() {
     }
   };
 
+  const fetchCategory = async () => {
+    try {
+      const data = await getCategory();
+      setCategories(data);
+    } catch (err) {
+      console.error("Failed to load category:", err);
+    }
+  };
   const fetchSpecificSales = async (id) => {
     try {
       const data = await getSpecificSales(id);
@@ -61,6 +73,7 @@ function Sales() {
         itemName,
         price: Number(price),
         quantity: Number(quantity),
+        category,
       });
 
       setSales([newSale, ...sales]);
@@ -72,14 +85,14 @@ function Sales() {
     }
   };
 
-  const handleDeleteSales = async (id) => {
+  const handleDeleteSale = async (id) => {
     await confirmDelete(async () => {
       await deleteSale(id);
       fetchSales();
     }, "sale");
   };
 
-  const handleUpdate = async (id) => {
+  const handleUpdateSale = async (id) => {
     try {
       setLoading(true);
       const updated = await updateSale(selectedSale._id, {
@@ -120,6 +133,7 @@ function Sales() {
                 <th scope="col">Name</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Price</th>
+                <th scope="col">Category</th>
                 <th scope="col">Total</th>
                 <th scope="col">ID</th>
               </tr>
@@ -130,11 +144,12 @@ function Sales() {
                   <td>{s.itemName}</td>
                   <td>{s.quantity}</td>
                   <td>{s.price}</td>
+                  <td>{s.category?.name || "No category"}</td>
                   <td>{s.total}</td>
                   <td>
                     <div className="flex gap-4">
                       <i
-                        onClick={() => handleDeleteSales(s._id)}
+                        onClick={() => handleDeleteSale(s._id)}
                         className="text-red-300 fa-solid fa-trash cursor-pointer"
                       ></i>
                       <i
@@ -167,7 +182,7 @@ function Sales() {
                       {
                         modalMode === "add"
                           ? handleAddSale()
-                          : handleUpdate(selectedSale._id, {
+                          : handleUpdateSale(selectedSale._id, {
                               itemName,
                               quantity,
                               price,
@@ -196,6 +211,21 @@ function Sales() {
                       value={quantity}
                       onChange={(e) => setQuantity(e.target.value)}
                     />
+                    <label className="text-left text-black" for="cars">
+                      Choose a Category:
+                    </label>
+                    <select
+                      className="text-black"
+                      id="categories"
+                      onChange={(e) => setCategory(e.target.value)}
+                    >
+                      {categories.map((cat, i) => (
+                        <option key={i} value={cat._id}>
+                          {capitalizeFirstWord(cat.name)}
+                        </option>
+                      ))}
+                    </select>
+
                     <button className="global-button" type="submit">
                       {modalMode === "add" ? "Add" : "Update"}
                       {loading && "Saving..."}

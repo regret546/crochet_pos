@@ -7,6 +7,11 @@ export const getCategory = async () => {
   return res.data;
 };
 
+export const getSpecificCategory = async (id) => {
+  const res = await axios.get(`${API_URL_CATEGORY}/${id}`);
+  return res.data;
+};
+
 export const addCategory = async (categoryData) => {
   const res = await axios.post(API_URL_CATEGORY, categoryData);
   return res.data;
