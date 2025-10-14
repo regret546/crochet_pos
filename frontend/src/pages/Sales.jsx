@@ -60,6 +60,7 @@ function Sales() {
       setItemName(data.itemName);
       setPrice(data.price);
       setQuantity(data.quantity);
+      setCategory(data.category);
     } catch (err) {
       console.error("Failed to load sales:", err);
     }
@@ -174,6 +175,7 @@ function Sales() {
                 <div className="relative text-center grid w-[300px] bg-gray-200 p-4">
                   <h2 className="my-[2rem]">
                     {modalMode === "add" ? "Add" : "Edit"} a Sale
+                    {console.log(category)}
                   </h2>
                   <form
                     className="grid gap-4 "
@@ -217,10 +219,11 @@ function Sales() {
                     <select
                       className="text-black"
                       id="categories"
+                      value={category ? category.name : categories[0].name}
                       onChange={(e) => setCategory(e.target.value)}
                     >
                       {categories.map((cat, i) => (
-                        <option key={i} value={cat._id}>
+                        <option key={i} value={cat.name}>
                           {capitalizeFirstWord(cat.name)}
                         </option>
                       ))}

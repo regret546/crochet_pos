@@ -10,10 +10,10 @@ const saleSchema = Schema(
     date: { type: Date, default: Date.now },
     category: {
       type: Schema.Types.ObjectId,
-      ref: "Cagetegory",
+      ref: "Category",
     },
   },
-  { timestamps: true } //add createAt and updatedAt
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Sale", saleSchema);

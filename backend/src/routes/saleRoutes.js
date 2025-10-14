@@ -6,7 +6,9 @@ const Sale = require("../models/Sales");
 // @route  GET /api/sales
 router.get("/", async (req, res) => {
   try {
-    const sales = await Sale.find().sort({ createdAt: -1 });
+    const sales = await Sale.find()
+      .populate("category", "name")
+      .sort({ createdAt: -1 });
     if (!sales) {
       return res.status(404).json({ message: "Sale not found" });
     }
@@ -20,7 +22,10 @@ router.get("/", async (req, res) => {
 // @route   POST /api/sales/:id
 router.get("/:id", async (req, res) => {
   try {
-    const sales = await Sale.findById(req.params.id);
+    const sales = await Sale.findById(req.params.id).populate(
+      "category",
+      "name"
+    );
     if (!sales) {
       return res.status(404).json({ message: "Sale not found" });
     }
@@ -33,11 +38,11 @@ router.get("/:id", async (req, res) => {
 // @desc   Add new sale
 // @route  POST /api/sales
 router.post("/", async (req, res) => {
-  const { itemName, quantity, price } = req.body;
+  const { itemName, quantity, price, category } = req.body;
   const total = quantity * price;
 
   try {
-    const sale = new Sale({ itemName, quantity, price, total });
+    const sale = new Sale({ itemName, quantity, price, total, category });
     const saveSale = await sale.save();
     res.status(201).json(saveSale);
   } catch (err) {

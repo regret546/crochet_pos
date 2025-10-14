@@ -21,3 +21,8 @@ export const deleteCategory = async (id) => {
   const res = await axios.delete(`${API_URL_CATEGORY}/${id}`);
   return res.data;
 };
+
+export const updateCategory = async (id, updatedData) => {
+  const res = await axios.put(`${API_URL_CATEGORY}/${id}`, updatedData);
+  return res.data;
+};

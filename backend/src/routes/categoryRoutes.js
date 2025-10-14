@@ -16,6 +16,19 @@ router.get("/", async (req, res) => {
   }
 });
 
+// @desc   Get specific category
+// @route   POST /api/category/:id
+router.get("/:id", async (req, res) => {
+  try {
+    const category = await Category.findById(req.params.id);
+    if (!category)
+      return res.status(404).json({ message: "Category not found" });
+    res.json(category);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // @desc   Add new category
 // @route  POST /api/category
 router.post("/", async (req, res) => {
