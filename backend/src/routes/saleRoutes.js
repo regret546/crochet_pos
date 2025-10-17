@@ -54,11 +54,11 @@ router.post("/", async (req, res) => {
 // @route  PUT /api/sales/:id
 router.put("/:id", async (req, res) => {
   try {
-    const { itemName, quantity, price } = req.body;
+    const { itemName, quantity, price, category } = req.body;
     const total = quantity * price;
     const updateSale = await Sale.findByIdAndUpdate(
       req.params.id,
-      { itemName, quantity, price, total },
+      { itemName, quantity, price, total, category },
       { new: true }
     );
     if (!updateSale) {

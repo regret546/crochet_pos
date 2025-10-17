@@ -27,12 +27,15 @@ const Sidebar = ({ selected, setSelected }) => {
   return (
     <motion.nav
       layout
-      className="sticky top-0 h-screen shrink-0 bg-gray-700"
+      className="sticky top-0 h-screen shrink-0 bg-sky-200 "
       style={{ width: open ? "225px" : "fit-content" }}
     >
       <TitleSection open={open} />
 
-      <div className="space-y-1">
+      <div
+        className="space-y-1 grid"
+        style={{ justifyContent: open ? "" : "center" }}
+      >
         <Option
           Icon={<i className="fa-solid fa-house"></i>}
           title="Home"
@@ -75,8 +78,10 @@ const Option = ({ Icon, title, selected, setSelected, open }) => (
   <motion.button
     layout
     onClick={() => setSelected(title)}
-    className={`relative flex h-10 w-full items-center rounded-md cursor-pointer transition-colors text-white ${
-      selected === title ? "bg-pink-600 " : "hover:bg-white hover:text-black"
+    className={`relative flex h-10 w-full items-center rounded-md cursor-pointer transition-colors ${
+      selected === title
+        ? "bg-white text-black"
+        : "text-white hover:bg-white hover:text-black"
     }`}
   >
     <motion.div layout className="p-4">

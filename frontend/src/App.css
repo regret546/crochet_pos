@@ -20,6 +20,10 @@
   --color-grayish-200: hsl(240 3% 65%);
   --color-grayish-300: hsl(240 3% 56%);
   --color-grayish-400: hsl(240 3% 40%);
+
+  --color-sky-50: hsl(210 78% 92%);
+  --color-sky-100: hsl(210 78% 79%);
+  --color-sky-200: hsl(210 78% 65%);
 }
 
 @layer base {

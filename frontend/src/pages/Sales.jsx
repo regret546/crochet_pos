@@ -60,7 +60,7 @@ function Sales() {
       setItemName(data.itemName);
       setPrice(data.price);
       setQuantity(data.quantity);
-      setCategory(data.category);
+      setCategory(data.category ? data.category : categories[0]);
     } catch (err) {
       console.error("Failed to load sales:", err);
     }
@@ -100,6 +100,7 @@ function Sales() {
         itemName,
         quantity,
         price,
+        category,
       });
       fetchSales();
       setLoading(false);
@@ -110,9 +111,9 @@ function Sales() {
     }
   };
   return (
-    <div className="w-full bg-slate-300 text-white">
-      <div className="grid justify-center w-full">
-        <h2 className="my-[2rem]">Record a Sale</h2>
+    <div className="w-full bg-slate-300 text-white p-4">
+      <div className="grid ">
+        <h2 className="text-left text-2xl my-4">Record a Sale</h2>
 
         <button
           onClick={() => {
@@ -120,14 +121,14 @@ function Sales() {
             setModalMode("add");
             toggleModal();
           }}
-          className="global-button"
+          className="bg-lavender-100 w-[200px] p-2 rounded-md cursor-pointer"
           type="submit"
         >
           Add Sale
         </button>
 
         <h3 className="text-center mt-4">Sales History</h3>
-        <div className="sales-table overflow-x-auto border-2 mt-2 ">
+        <div className="sales-table overflow-x-auto mt-2 ">
           <table className="border-separate border-spacing-y-4 w-full">
             <thead>
               <tr>
@@ -175,7 +176,6 @@ function Sales() {
                 <div className="relative text-center grid w-[300px] bg-gray-200 p-4">
                   <h2 className="my-[2rem]">
                     {modalMode === "add" ? "Add" : "Edit"} a Sale
-                    {console.log(category)}
                   </h2>
                   <form
                     className="grid gap-4 "
@@ -188,6 +188,7 @@ function Sales() {
                               itemName,
                               quantity,
                               price,
+                              category,
                             });
                       }
                     }}
@@ -219,8 +220,15 @@ function Sales() {
                     <select
                       className="text-black"
                       id="categories"
-                      value={category ? category.name : categories[0].name}
-                      onChange={(e) => setCategory(e.target.value)}
+                      value={category.name}
+                      onChange={(e) =>
+                        setCategory(
+                          categories.find(
+                            (cat) =>
+                              cat.name === capitalizeFirstWord(e.target.value)
+                          )
+                        )
+                      }
                     >
                       {categories.map((cat, i) => (
                         <option key={i} value={cat.name}>
