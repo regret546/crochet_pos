@@ -42,7 +42,7 @@
     }
   }
   .record-input {
-    @apply focus:outline-none p-2 rounded-full ring-2 ring-white;
+    @apply focus:outline-none p-2 rounded-sm ring-2 ring-black text-black;
   }
 
   .global-button {

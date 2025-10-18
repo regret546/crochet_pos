@@ -1,5 +1,5 @@
-import React from "react";
 import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   getCategory,
   addCategory,
@@ -125,10 +125,20 @@ const Category = () => {
           </tbody>
         </table>
       </div>
-      {modal && (
-        <div className="modal">
-          <div className="fixed inset-0 grid place-items-center bg-purple-500">
-            <div className="relative text-center grid w-[300px] bg-gray-200 p-4">
+      <AnimatePresence>
+        {modal && (
+          <motion.div
+            initial={{ scale: 0, rotate: "12.5deg" }}
+            animate={{ scale: 1, rotate: "0deg" }}
+            exit={{ scale: 0, rotate: "0deg" }}
+            transition={{ duration: 0.2, ease: "backInOut" }}
+            onClick={(e) => setModal(false)}
+            className="fixed inset-0 grid place-items-center backdrop-blur"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="relative text-center md:max-w-[450px] w-full grid bg-sky-300 rounded-lg p-4 shadow-xl "
+            >
               <h2 className="my-[2rem]">
                 {modalMode == "add" ? "Add" : "Edit"} Category
               </h2>
@@ -144,7 +154,7 @@ const Category = () => {
                 }}
               >
                 <input
-                  className=""
+                  className="record-input"
                   type="text"
                   placeholder="Category Name"
                   value={category}
@@ -159,12 +169,12 @@ const Category = () => {
                 onClick={toggleModal}
                 className="global-button bg-red-400 text-white"
               >
-                Close
+                Cancel
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
