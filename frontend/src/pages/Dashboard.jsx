@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "motion/react";
 import Home from "./Home";
 import Sales from "./Sales";
@@ -8,12 +7,13 @@ import Category from "./Category";
 export default function Dashboard() {
   const [selected, setSelected] = useState("Home");
   return (
-    <motion.div layout className="flex bg-gray-700">
+    <motion.div layout className="flex bg-sky-200 z-20">
       <div>
         {" "}
         <Sidebar selected={selected} setSelected={setSelected} />
         <ExampleContent />
       </div>
+
       {selected === "Home" && <Home />}
       {selected === "Sales" && <Sales />}
       {selected === "Category" && <Category />}
@@ -134,7 +134,7 @@ const ToggleClose = ({ open, setOpen }) => {
     <motion.button
       layout
       onClick={() => setOpen((pv) => !pv)}
-      className=" absolute bottom-0 left-0 right-0 border-t border-red-600 transition-colors hover:bg-amber-700"
+      className=" absolute bottom-0 left-0 right-0 border-t border-white transition-colors cursor-pointer"
     >
       <div className="flex items-center p-2">
         <motion.div
@@ -143,7 +143,7 @@ const ToggleClose = ({ open, setOpen }) => {
         >
           <div className="flex">
             <i
-              className={`fa-solid fa-arrow-right transition-transform  ${
+              className={`fa-solid fa-arrow-right transition-transform text-white  ${
                 open && "rotate-180"
               }`}
             ></i>
@@ -153,7 +153,7 @@ const ToggleClose = ({ open, setOpen }) => {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.125 }}
-                className="text-xs font-medium"
+                className="text-xs font-medium text-white "
               >
                 Hide
               </motion.span>

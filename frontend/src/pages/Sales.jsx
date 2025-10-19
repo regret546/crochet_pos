@@ -116,7 +116,7 @@ function Sales() {
     }
   };
   return (
-    <div className="w-full bg-slate-300 text-white p-4">
+    <motion.div layout className="w-full bg-slate-300 text-white p-4">
       <div className="grid ">
         <h2 className="text-left text-2xl my-4">Record a Sale</h2>
 
@@ -269,7 +269,7 @@ function Sales() {
           </AnimatePresence>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

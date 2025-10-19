@@ -55,6 +55,22 @@
     }
   }
 
+  .dashboard-card {
+    @apply p-4 rounded-sm grid relative gap-2 max-w-[350px] w-full;
+    h2 {
+      @apply text-5xl;
+    }
+    p {
+      @apply text-[1rem];
+    }
+    i {
+      @apply absolute  text-[4rem] opacity-30 right-0 top-5;
+    }
+    button {
+      @apply bg-black/20 p-2 text-white cursor-pointer;
+    }
+  }
+
   .sales-table {
     td {
       @apply px-6 py-3;

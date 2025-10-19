@@ -9,7 +9,6 @@ import {
 } from "../api/categoryApi";
 import { useEffect } from "react";
 import { confirmDelete } from "../utils";
-import { addSale } from "../api/saleApi";
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
