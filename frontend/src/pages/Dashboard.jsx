@@ -14,7 +14,7 @@ export default function Dashboard() {
         <ExampleContent />
       </div>
 
-      {selected === "Home" && <Home />}
+      {selected === "Home" && <Home setSelected={setSelected} />}
       {selected === "Sales" && <Sales />}
       {selected === "Category" && <Category />}
     </motion.div>
@@ -32,7 +32,7 @@ const Sidebar = ({ selected, setSelected }) => {
     >
       <TitleSection open={open} />
 
-      <div
+      <motion.div
         className="space-y-1 grid"
         style={{ justifyContent: open ? "" : "center" }}
       >
@@ -67,7 +67,7 @@ const Sidebar = ({ selected, setSelected }) => {
           setSelected={setSelected}
           open={open}
         />
-      </div>
+      </motion.div>
 
       <ToggleClose open={open} setOpen={setOpen} />
     </motion.nav>

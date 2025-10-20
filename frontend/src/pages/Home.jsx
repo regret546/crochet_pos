@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 import { getSales } from "../api/saleApi";
 import { getCategory } from "../api/categoryApi";
 
-const Home = () => {
+const Home = ({ setSelected }) => {
   const [numberOfSales, setNumberOfSales] = useState();
   const [numberOfCategory, setNumberOfCategory] = useState();
   const [sales, setSales] = useState([]);
@@ -15,6 +15,10 @@ const Home = () => {
   const loadData = () => {
     fetchSales();
     fetchCategory();
+  };
+
+  const viewPage = (page) => {
+    setSelected(page);
   };
 
   const fetchSales = async () => {
@@ -46,7 +50,13 @@ const Home = () => {
             <h2>{numberOfCategory}</h2>
             <p>Total Categories </p>
           </div>
-          <button>View</button>
+          <button
+            onClick={() => {
+              viewPage("Category");
+            }}
+          >
+            View
+          </button>
         </div>
 
         <div className="dashboard-card grid bg-sky-200 relative">
@@ -55,7 +65,13 @@ const Home = () => {
             <h2>{numberOfSales}</h2>
             <p>Number of Sale Items </p>
           </div>
-          <button>View</button>
+          <button
+            onClick={() => {
+              viewPage("Sales");
+            }}
+          >
+            View
+          </button>
         </div>
 
         <div className="dashboard-card grid bg-sky-200 relative">
@@ -64,7 +80,13 @@ const Home = () => {
             <h2>{sales.reduce((sum, sale) => sum + sale.total, 0)}</h2>
             <p>Total Sales </p>
           </div>
-          <button>View</button>
+          <button
+            onClick={() => {
+              viewPage("Sales");
+            }}
+          >
+            View
+          </button>
         </div>
       </div>
     </motion.div>
