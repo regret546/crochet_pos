@@ -1,11 +1,31 @@
 import { useState } from "react";
+import { loginUser } from "../api/authApi";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const handleLogin = (e) => {
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Logging in:", username, password);
+    setError("");
+    setLoading(true);
+
+    try {
+      const data = await loginUser({ username, password });
+      console.log("✅ Login successful:", data);
+      // Save user/token to localStorage
+      localStorage.setItem("userInfo", JSON.stringify(data));
+
+      // Redirect to dashboard (example)
+      window.location.href = "/dashboard";
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className="grid place-items-center h-[100vh] ">
@@ -52,7 +72,9 @@ function Login() {
             </label>
           </div>
 
-          <button className="global-button">Login</button>
+          <button className="global-button">
+            {loading ? "Logging in..." : "Login"}
+          </button>
         </div>
       </form>
     </div>

@@ -1,16 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
+import { useNavigate } from "react-router-dom";
 import Home from "./Home";
 import Sales from "./Sales";
 import Category from "./Category";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+
+    if (!userInfo) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("userInfo");
+    navigate("/login");
+  };
+
   const [selected, setSelected] = useState("Home");
   return (
     <motion.div layout className="flex bg-sky-200 z-20">
       <div>
         {" "}
-        <Sidebar selected={selected} setSelected={setSelected} />
+        <Sidebar
+          selected={selected}
+          setSelected={setSelected}
+          handleLogout={handleLogout}
+        />
         <ExampleContent />
       </div>
 
@@ -21,7 +40,7 @@ export default function Dashboard() {
   );
 }
 
-const Sidebar = ({ selected, setSelected }) => {
+const Sidebar = ({ selected, setSelected, handleLogout }) => {
   const [open, setOpen] = useState(true);
 
   return (
@@ -66,6 +85,7 @@ const Sidebar = ({ selected, setSelected }) => {
           selected={selected}
           setSelected={setSelected}
           open={open}
+          handleLogout={handleLogout}
         />
       </motion.div>
 
@@ -74,32 +94,42 @@ const Sidebar = ({ selected, setSelected }) => {
   );
 };
 
-const Option = ({ Icon, title, selected, setSelected, open }) => (
-  <motion.button
-    layout
-    onClick={() => setSelected(title)}
-    className={`relative flex h-10 w-full items-center rounded-md cursor-pointer transition-colors ${
-      selected === title
-        ? "bg-white text-black"
-        : "text-white hover:bg-white hover:text-black"
-    }`}
-  >
-    <motion.div layout className="p-4">
-      {Icon}
-    </motion.div>
-    {open && (
-      <motion.span
-        layout
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.125 }}
-        className="text-md font-medium"
-      >
-        {title}
-      </motion.span>
-    )}
-  </motion.button>
-);
+const Option = ({ Icon, title, selected, setSelected, open, handleLogout }) => {
+  const handleClick = () => {
+    if (title === "Logout") {
+      handleLogout();
+    } else {
+      setSelected(title);
+    }
+  };
+
+  return (
+    <motion.button
+      layout
+      onClick={handleClick}
+      className={`relative flex h-10 w-full items-center rounded-md cursor-pointer transition-colors ${
+        selected === title
+          ? "bg-white text-black"
+          : "text-white hover:bg-white hover:text-black"
+      }`}
+    >
+      <motion.div layout className="p-4">
+        {Icon}
+      </motion.div>
+      {open && (
+        <motion.span
+          layout
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.125 }}
+          className="text-md font-medium"
+        >
+          {title}
+        </motion.span>
+      )}
+    </motion.button>
+  );
+};
 const TitleSection = ({ open }) => {
   return (
     <div>
