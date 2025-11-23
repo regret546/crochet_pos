@@ -9,7 +9,7 @@ import "./App.css";
 function App() {
   return (
     <Router>
-      <div className="h-[100vh] w-[100%] bg-[url('./assets/crochet.jpg')] bg-cover bg-center">
+      <div className="min-h-screen w-full">
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />

@@ -41,52 +41,74 @@ const Home = ({ setSelected }) => {
   };
 
   return (
-    <motion.div layout className="bg-purple-300 w-full p-4 z-10">
-      <h3 className="text-left text-2xl my-4">Dashboard</h3>
-      <div className="dashboard flex flex-wrap gap-4">
-        <div className="dashboard-card grid bg-sky-200 relative">
-          <i className="fa-solid fa-boxes-packing"></i>
-          <div className="grid text-left gap-4 text-white">
-            <h2>{numberOfCategory}</h2>
-            <p>Total Categories </p>
-          </div>
-          <button
-            onClick={() => {
-              viewPage("Category");
-            }}
+    <motion.div 
+      layout 
+      className="w-full p-4 md:p-6 lg:p-8 min-h-screen"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      <div className="max-w-7xl mx-auto">
+        <h3 className="text-left text-3xl md:text-4xl font-bold text-slate-800 mb-6 md:mb-8">
+          Dashboard
+        </h3>
+        <div className="dashboard grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <motion.div 
+            className="dashboard-card"
+            whileHover={{ y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
           >
-            View
-          </button>
-        </div>
+            <i className="fa-solid fa-boxes-packing"></i>
+            <div className="grid text-left gap-2 text-white">
+              <h2>{numberOfCategory ?? 0}</h2>
+              <p>Total Categories</p>
+            </div>
+            <button
+              onClick={() => {
+                viewPage("Category");
+              }}
+            >
+              View Categories
+            </button>
+          </motion.div>
 
-        <div className="dashboard-card grid bg-sky-200 relative">
-          <i className="fa-solid fa-boxes-stacked"></i>
-          <div className="grid text-left gap-4 text-white">
-            <h2>{numberOfSales}</h2>
-            <p>Number of Sale Items </p>
-          </div>
-          <button
-            onClick={() => {
-              viewPage("Sales");
-            }}
+          <motion.div 
+            className="dashboard-card"
+            whileHover={{ y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
           >
-            View
-          </button>
-        </div>
+            <i className="fa-solid fa-boxes-stacked"></i>
+            <div className="grid text-left gap-2 text-white">
+              <h2>{numberOfSales ?? 0}</h2>
+              <p>Number of Sale Items</p>
+            </div>
+            <button
+              onClick={() => {
+                viewPage("Sales");
+              }}
+            >
+              View Sales
+            </button>
+          </motion.div>
 
-        <div className="dashboard-card grid bg-sky-200 relative">
-          <i className="fa-solid fa-peso-sign"></i>
-          <div className="grid text-left gap-4 text-white">
-            <h2>{sales.reduce((sum, sale) => sum + sale.total, 0)}</h2>
-            <p>Total Sales </p>
-          </div>
-          <button
-            onClick={() => {
-              viewPage("Sales");
-            }}
+          <motion.div 
+            className="dashboard-card"
+            whileHover={{ y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
           >
-            View
-          </button>
+            <i className="fa-solid fa-peso-sign"></i>
+            <div className="grid text-left gap-2 text-white">
+              <h2>₱{sales.reduce((sum, sale) => sum + (sale.total || 0), 0).toLocaleString()}</h2>
+              <p>Total Sales</p>
+            </div>
+            <button
+              onClick={() => {
+                viewPage("Sales");
+              }}
+            >
+              View Sales
+            </button>
+          </motion.div>
         </div>
       </div>
     </motion.div>

@@ -1,79 +1,137 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-pink-50: hsl(326 67% 96%);
-  --color-pink-100: hsl(326 67% 90%);
-  --color-pink-200: hsl(326 60% 84%);
-  --color-pink-300: hsl(326 55% 76%);
+  /* Aesthetic Color Palette - Soft, Modern, Cozy */
+  --color-rose-50: hsl(350 100% 97%);
+  --color-rose-100: hsl(350 95% 92%);
+  --color-rose-200: hsl(350 90% 85%);
+  --color-rose-300: hsl(350 85% 75%);
+  --color-rose-400: hsl(350 80% 65%);
+  --color-rose-500: hsl(350 75% 55%);
 
-  --color-lavender-50: hsl(262 45% 92%);
-  --color-lavender-100: hsl(262 45% 80%);
-  --color-lavender-200: hsl(262 40% 70%);
-  --color-lavender-300: hsl(262 35% 60%);
+  --color-lavender-50: hsl(270 50% 96%);
+  --color-lavender-100: hsl(270 45% 90%);
+  --color-lavender-200: hsl(270 40% 82%);
+  --color-lavender-300: hsl(270 35% 72%);
+  --color-lavender-400: hsl(270 30% 62%);
+  --color-lavender-500: hsl(270 25% 52%);
 
-  --color-grayish-50: hsl(240 3% 94%);
-  --color-grayish-100: hsl(240 3% 80%);
-  --color-grayish-200: hsl(240 3% 65%);
-  --color-grayish-300: hsl(240 3% 56%);
-  --color-grayish-400: hsl(240 3% 40%);
+  --color-mint-50: hsl(160 50% 96%);
+  --color-mint-100: hsl(160 45% 90%);
+  --color-mint-200: hsl(160 40% 82%);
+  --color-mint-300: hsl(160 35% 72%);
 
-  --color-sky-50: hsl(210 78% 92%);
-  --color-sky-100: hsl(210 78% 79%);
-  --color-sky-200: hsl(210 78% 65%);
+  --color-cream-50: hsl(40 30% 98%);
+  --color-cream-100: hsl(40 25% 95%);
+  --color-cream-200: hsl(40 20% 90%);
+
+  --color-slate-50: hsl(220 15% 96%);
+  --color-slate-100: hsl(220 12% 90%);
+  --color-slate-200: hsl(220 10% 80%);
+  --color-slate-300: hsl(220 8% 65%);
+  --color-slate-400: hsl(220 6% 50%);
+  --color-slate-500: hsl(220 8% 35%);
+  --color-slate-600: hsl(220 10% 25%);
+  --color-slate-700: hsl(220 12% 18%);
+  --color-slate-800: hsl(220 15% 12%);
+  --color-slate-900: hsl(220 18% 8%);
 }
 
 @layer base {
+  * {
+    @apply box-border;
+  }
+
   html {
-    font-family: "Noto Sans", sans-serif;
-    letter-spacing: 0.1em;
+    font-family: "Inter", "Noto Sans", sans-serif;
+    letter-spacing: 0.02em;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-gradient-to-br from-cream-50 via-rose-50 to-lavender-50 min-h-screen;
   }
 
   .input-box {
     @apply relative grid items-center;
   }
 
-  .input-box {
-    input {
-      @apply focus:outline-none p-2 rounded-full ring-2 ring-white;
-    }
+  .input-box input {
+    @apply focus:outline-none p-3 px-4 rounded-xl ring-2 ring-lavender-200 bg-white/90 backdrop-blur-sm text-slate-700 placeholder-slate-400 transition-all duration-200 focus:ring-rose-300 focus:bg-white;
   }
+
   .record-input {
-    @apply focus:outline-none p-2 rounded-sm ring-2 ring-black text-black;
+    @apply focus:outline-none p-3 px-4 rounded-xl ring-2 ring-slate-200 bg-white text-slate-700 placeholder-slate-400 transition-all duration-200 focus:ring-rose-300 focus:bg-white;
   }
 
   .global-button {
-    @apply grid p-2 m-2 bg-white text-black cursor-pointer rounded-full shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] hover:opacity-80;
+    @apply grid place-items-center p-3 px-6 bg-gradient-to-r from-rose-400 to-lavender-400 text-white cursor-pointer rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 font-medium;
   }
 
   .sales-table {
-    th {
-      @apply px-6 py-3;
-    }
+    @apply w-full;
+  }
+
+  .sales-table th {
+    @apply px-4 py-3 text-left text-sm font-semibold text-slate-700 bg-slate-50/50 first:rounded-tl-xl last:rounded-tr-xl;
+  }
+
+  .sales-table td {
+    @apply px-4 py-3 text-slate-600 border-b border-slate-100;
   }
 
   .dashboard-card {
-    @apply p-4 rounded-sm grid relative gap-2 max-w-[350px] w-full;
-    h2 {
-      @apply text-5xl;
-    }
-    p {
-      @apply text-[1rem];
-    }
-    i {
-      @apply absolute  text-[4rem] opacity-30 right-0 top-5;
-    }
-    button {
-      @apply bg-black/20 p-2 text-white cursor-pointer;
-    }
+    @apply p-6 rounded-2xl grid relative gap-3 w-full transition-all duration-300 hover:shadow-xl hover:scale-[1.02];
+    background: linear-gradient(135deg, var(--color-rose-200) 0%, var(--color-lavender-200) 100%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
 
-  .sales-table {
-    td {
-      @apply px-6 py-3;
+  .dashboard-card h2 {
+    @apply text-4xl md:text-5xl font-bold text-white drop-shadow-sm;
+  }
+
+  .dashboard-card p {
+    @apply text-base md:text-lg text-white/90 font-medium;
+  }
+
+  .dashboard-card i {
+    @apply absolute text-5xl md:text-6xl opacity-20 right-4 top-4 text-white;
+  }
+
+  .dashboard-card button {
+    @apply bg-white/30 backdrop-blur-sm p-3 text-white font-medium rounded-xl cursor-pointer hover:bg-white/40 transition-all duration-200 border border-white/20;
+  }
+
+  /* Responsive table wrapper */
+  .table-wrapper {
+    @apply overflow-x-auto -mx-4 px-4;
+  }
+
+  /* Mobile card view for tables */
+  @media (max-width: 768px) {
+    .sales-table thead {
+      @apply hidden;
+    }
+
+    .sales-table tbody tr {
+      @apply block mb-4 bg-white rounded-xl shadow-md p-4 border border-slate-100;
+    }
+
+    .sales-table tbody td {
+      @apply block px-0 py-2 border-0 text-sm;
+    }
+
+    .sales-table tbody td:not(:last-child) {
+      @apply border-b border-slate-100 pb-3 mb-2;
+    }
+
+    .sales-table tbody td:before {
+      content: attr(data-label);
+      @apply font-semibold text-slate-500 block mb-1 text-xs uppercase tracking-wide;
     }
   }
 }
