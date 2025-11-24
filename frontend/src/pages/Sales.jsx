@@ -21,6 +21,9 @@ function Sales() {
   const [modal, setModal] = useState(false);
   const [selectedSale, setSelectedSale] = useState(null);
   const [modalMode, setModalMode] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const resetField = () => {
     setItemName("");
@@ -82,6 +85,7 @@ function Sales() {
         category: category ? category : categories[0],
       });
       setSales([newSale, ...sales]);
+      setCurrentPage(1); // Reset to first page after adding
       toggleModal();
     } catch (err) {
       console.error("Failed to add sale:", err);
@@ -95,6 +99,7 @@ function Sales() {
     await confirmDelete(async () => {
       await deleteSale(id);
       fetchSales();
+      setCurrentPage(1); // Reset to first page after deletion
     }, "sale");
   };
 
@@ -109,11 +114,46 @@ function Sales() {
       });
       fetchSales();
       setLoading(false);
+      setCurrentPage(1); // Reset to first page after updating
       toggleModal();
     } catch (err) {
       console.error("Update failed:", err);
       setLoading(false);
     }
+  };
+
+  // Filter sales based on search term (searches item name and category)
+  const filteredSales = sales.filter((sale) => {
+    const matchesItemName = sale.itemName?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = sale.category?.name?.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesItemName || matchesCategory;
+  });
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredSales.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedSales = filteredSales.slice(startIndex, endIndex);
+
+  // Reset to first page when search changes
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  };
+
+  // Format date for display (mobile-friendly)
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    const options = { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    // Format: "Dec 25, 2024, 02:30 PM"
+    return date.toLocaleString('en-US', options);
   };
   return (
     <motion.div 
@@ -141,12 +181,27 @@ function Sales() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6">
-          <h3 className="text-xl md:text-2xl font-semibold text-slate-700 mb-4">Sales History</h3>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
+            <h3 className="text-xl md:text-2xl font-semibold text-slate-700">Sales History</h3>
+            {/* Search Input */}
+            <div className="relative w-full md:w-auto md:min-w-[250px]">
+              <i className="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+              <input
+                type="text"
+                placeholder="Search by item or category..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="record-input w-full pl-10 pr-4"
+              />
+            </div>
+          </div>
+
           <div className="table-wrapper">
             <table className="sales-table w-full">
               <thead>
                 <tr>
                   <th scope="col">Name</th>
+                  <th scope="col">Date</th>
                   <th scope="col">Quantity</th>
                   <th scope="col">Price</th>
                   <th scope="col">Category</th>
@@ -155,16 +210,21 @@ function Sales() {
                 </tr>
               </thead>
               <tbody>
-                {sales.length === 0 ? (
+                {filteredSales.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="text-center py-8 text-slate-400">
-                      No sales recorded yet. Add your first sale!
+                    <td colSpan="7" className="text-center py-8 text-slate-400">
+                      {searchTerm
+                        ? `No sales found matching "${searchTerm}"`
+                        : "No sales recorded yet. Add your first sale!"}
                     </td>
                   </tr>
                 ) : (
-                  sales.map((s, i) => (
+                  paginatedSales.map((s, i) => (
                     <tr key={i} className="hover:bg-slate-50 transition-colors">
                       <td data-label="Name" className="font-medium text-slate-700">{s.itemName}</td>
+                      <td data-label="Date" className="text-sm text-slate-600">
+                        <span className="block md:inline">{formatDate(s.date || s.createdAt)}</span>
+                      </td>
                       <td data-label="Quantity">{s.quantity}</td>
                       <td data-label="Price">₱{s.price?.toLocaleString()}</td>
                       <td data-label="Category">
@@ -201,6 +261,49 @@ function Sales() {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination Controls */}
+          {filteredSales.length > itemsPerPage && (
+            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-sm text-slate-600">
+                Showing {startIndex + 1} to {Math.min(endIndex, filteredSales.length)} of{" "}
+                {filteredSales.length} sales
+              </div>
+              <div className="flex items-center gap-2 flex-wrap justify-center">
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                  <i className="fa-solid fa-chevron-left mr-1"></i>
+                  Previous
+                </button>
+                <div className="flex items-center gap-1 flex-wrap justify-center">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-3 py-2 rounded-lg border transition-colors font-medium ${
+                        currentPage === page
+                          ? "bg-gradient-to-r from-rose-400 to-lavender-400 text-white border-transparent"
+                          : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                  Next
+                  <i className="fa-solid fa-chevron-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

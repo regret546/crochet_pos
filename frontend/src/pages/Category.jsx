@@ -16,6 +16,9 @@ const Category = () => {
   const [modal, setModal] = useState(false);
   const [modalMode, setModalMode] = useState("");
   const [selectedCategory, setSelectedSCategory] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     fetchCategory();
@@ -55,6 +58,7 @@ const Category = () => {
       const newCategory = await addCategory({ name: category });
       setCategories([newCategory, ...categories]);
       fetchCategory();
+      setCurrentPage(1); // Reset to first page after adding
       toggleModal();
     } catch (err) {
       console.error("Failed to add category:", err);
@@ -65,9 +69,10 @@ const Category = () => {
     try {
       const updated = await updateCategory(id, { name: category });
       fetchCategory();
+      setCurrentPage(1); // Reset to first page after updating
       toggleModal();
     } catch (error) {
-      console.error("Update failed:", err);
+      console.error("Update failed:", error);
     }
   };
 
@@ -75,7 +80,25 @@ const Category = () => {
     await confirmDelete(async () => {
       await deleteCategory(id);
       fetchCategory();
+      setCurrentPage(1); // Reset to first page after deletion
     }, "category");
+  };
+
+  // Filter categories based on search term
+  const filteredCategories = categories.filter((cat) =>
+    cat.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedCategories = filteredCategories.slice(startIndex, endIndex);
+
+  // Reset to first page when search changes
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
   };
 
   return (
@@ -96,6 +119,20 @@ const Category = () => {
           </button>
         </div>
         <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6">
+          {/* Search Input */}
+          <div className="mb-4">
+            <div className="relative">
+              <i className="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+              <input
+                type="text"
+                placeholder="Search categories..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="record-input w-full pl-10 pr-4"
+              />
+            </div>
+          </div>
+
           <div className="table-wrapper">
             <table className="sales-table w-full">
               <thead>
@@ -105,14 +142,16 @@ const Category = () => {
                 </tr>
               </thead>
               <tbody>
-                {categories.length === 0 ? (
+                {filteredCategories.length === 0 ? (
                   <tr>
                     <td colSpan="2" className="text-center py-8 text-slate-400">
-                      No categories yet. Add your first category!
+                      {searchTerm
+                        ? `No categories found matching "${searchTerm}"`
+                        : "No categories yet. Add your first category!"}
                     </td>
                   </tr>
                 ) : (
-                  categories.map((cat, i) => (
+                  paginatedCategories.map((cat, i) => (
                     <tr key={i} className="hover:bg-slate-50 transition-colors">
                       <td data-label="Category" className="font-medium text-slate-700">
                         <span className="px-3 py-1.5 bg-lavender-100 text-lavender-600 rounded-full text-sm font-semibold inline-block">
@@ -149,6 +188,49 @@ const Category = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination Controls */}
+          {filteredCategories.length > itemsPerPage && (
+            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-sm text-slate-600">
+                Showing {startIndex + 1} to {Math.min(endIndex, filteredCategories.length)} of{" "}
+                {filteredCategories.length} categories
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                  <i className="fa-solid fa-chevron-left mr-1"></i>
+                  Previous
+                </button>
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-3 py-2 rounded-lg border transition-colors font-medium ${
+                        currentPage === page
+                          ? "bg-gradient-to-r from-rose-400 to-lavender-400 text-white border-transparent"
+                          : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                  Next
+                  <i className="fa-solid fa-chevron-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <AnimatePresence>

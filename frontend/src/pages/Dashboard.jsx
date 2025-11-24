@@ -112,7 +112,7 @@ const Sidebar = ({ selected, setSelected, handleLogout, mobileMenuOpen, setMobil
           <TitleSection open={open} />
 
           <motion.div
-            className="space-y-2 grid px-3 flex-1"
+            className="flex flex-col space-y-2 px-3 flex-1 py-4"
             style={{ justifyContent: open ? "" : "center" }}
           >
             <Option
@@ -176,7 +176,7 @@ const Sidebar = ({ selected, setSelected, handleLogout, mobileMenuOpen, setMobil
                 </button>
               </div>
 
-              <div className="space-y-2 grid px-3 flex-1 py-4">
+              <div className="flex flex-col space-y-2 px-3 flex-1 py-4">
                 <Option
                   Icon={<i className="fa-solid fa-house"></i>}
                   title="Home"
