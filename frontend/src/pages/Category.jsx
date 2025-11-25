@@ -102,10 +102,10 @@ const Category = () => {
   };
 
   return (
-    <div className="w-full min-h-screen p-4 md:p-6 lg:p-8">
+    <div className="w-full min-h-screen p-4 md:p-6 lg:p-8 pt-20 md:pt-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-          <h3 className="text-3xl md:text-4xl font-bold text-slate-800">Manage Category</h3>
+          <h3 className="text-3xl md:text-4xl font-bold text-slate-800 pl-16 md:pl-0">Manage Category</h3>
           <button
             onClick={() => {
               toggleModal();
