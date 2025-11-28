@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Home from "./Home";
 import Sales from "./Sales";
 import Category from "./Category";
+import ResetPasswordModal from "../components/ResetPasswordModal";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function Dashboard() {
 
   const [selected, setSelected] = useState("Home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
@@ -53,6 +55,13 @@ export default function Dashboard() {
         handleLogout={handleLogout}
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
+        setResetPasswordOpen={setResetPasswordOpen}
+      />
+
+      {/* Reset Password Modal */}
+      <ResetPasswordModal
+        isOpen={resetPasswordOpen}
+        onClose={() => setResetPasswordOpen(false)}
       />
 
       {/* Main Content */}
@@ -97,7 +106,7 @@ export default function Dashboard() {
   );
 }
 
-const Sidebar = ({ selected, setSelected, handleLogout, mobileMenuOpen, setMobileMenuOpen }) => {
+const Sidebar = ({ selected, setSelected, handleLogout, mobileMenuOpen, setMobileMenuOpen, setResetPasswordOpen }) => {
   const [open, setOpen] = useState(true);
 
   return (
@@ -139,7 +148,15 @@ const Sidebar = ({ selected, setSelected, handleLogout, mobileMenuOpen, setMobil
               open={open}
             />
 
-            <div className="mt-auto mb-4">
+            <div className="mt-auto mb-4 space-y-2">
+              <Option
+                Icon={<i className="fa-solid fa-key"></i>}
+                title="Reset Password"
+                selected={selected}
+                setSelected={setSelected}
+                open={open}
+                handleResetPassword={() => setResetPasswordOpen(true)}
+              />
               <Option
                 Icon={<i className="fa-solid fa-right-from-bracket"></i>}
                 title="Logout"
@@ -210,7 +227,18 @@ const Sidebar = ({ selected, setSelected, handleLogout, mobileMenuOpen, setMobil
                   open={true}
                 />
 
-                <div className="mt-auto">
+                <div className="mt-auto space-y-2">
+                  <Option
+                    Icon={<i className="fa-solid fa-key"></i>}
+                    title="Reset Password"
+                    selected={selected}
+                    setSelected={setSelected}
+                    open={true}
+                    handleResetPassword={() => {
+                      setResetPasswordOpen(true);
+                      setMobileMenuOpen(false);
+                    }}
+                  />
                   <Option
                     Icon={<i className="fa-solid fa-right-from-bracket"></i>}
                     title="Logout"
@@ -229,16 +257,18 @@ const Sidebar = ({ selected, setSelected, handleLogout, mobileMenuOpen, setMobil
   );
 };
 
-const Option = ({ Icon, title, selected, setSelected, open, handleLogout }) => {
+const Option = ({ Icon, title, selected, setSelected, open, handleLogout, handleResetPassword }) => {
   const handleClick = () => {
     if (title === "Logout") {
       handleLogout();
+    } else if (title === "Reset Password") {
+      handleResetPassword();
     } else {
       setSelected(title);
     }
   };
 
-  const isSelected = selected === title;
+  const isSelected = selected === title && title !== "Reset Password" && title !== "Logout";
 
   return (
     <motion.button
