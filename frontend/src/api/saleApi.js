@@ -13,7 +13,11 @@ export const getSpecificSales = async (id) => {
 };
 
 export const addSale = async (saleData) => {
-  const res = await axios.post(API_URL_SALES, saleData);
+  const res = await axios.post(API_URL_SALES, saleData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return res.data;
 };
 
@@ -23,6 +27,10 @@ export const deleteSale = async (id) => {
 };
 
 export const updateSale = async (id, updatedData) => {
-  const res = await axios.put(`${API_URL_SALES}/${id}`, updatedData);
+  const res = await axios.put(`${API_URL_SALES}/${id}`, updatedData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return res.data;
 };

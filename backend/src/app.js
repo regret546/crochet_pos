@@ -9,6 +9,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json()); // allows reading req.body (JSON)
+app.use("/uploads", express.static("uploads")); // Serve uploaded files
 
 app.use("/api/sales", saleRoutes);
 app.use("/api/auth", authRoutes);

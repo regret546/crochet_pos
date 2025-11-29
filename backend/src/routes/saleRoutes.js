@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Sale = require("../models/Sales");
+const upload = require("../middleware/uploadMiddleware");
 
 // @desc   Get all sales
 // @route  GET /api/sales
@@ -37,12 +38,24 @@ router.get("/:id", async (req, res) => {
 
 // @desc   Add new sale
 // @route  POST /api/sales
-router.post("/", async (req, res) => {
+router.post("/", upload.single("picture"), async (req, res) => {
   const { itemName, quantity, price, category } = req.body;
-  const total = quantity * price;
+  const numQuantity = Number(quantity);
+  const numPrice = Number(price);
+  const total = numQuantity * numPrice;
+  
+  // Get picture path if file was uploaded
+  const picture = req.file ? `/uploads/${req.file.filename}` : "";
 
   try {
-    const sale = new Sale({ itemName, quantity, price, total, category });
+    const sale = new Sale({ 
+      itemName, 
+      quantity: numQuantity, 
+      price: numPrice, 
+      total, 
+      category, 
+      picture 
+    });
     const saveSale = await sale.save();
     res.status(201).json(saveSale);
   } catch (err) {
@@ -52,13 +65,30 @@ router.post("/", async (req, res) => {
 
 // @desc   Update a sale
 // @route  PUT /api/sales/:id
-router.put("/:id", async (req, res) => {
+router.put("/:id", upload.single("picture"), async (req, res) => {
   try {
     const { itemName, quantity, price, category } = req.body;
-    const total = quantity * price;
+    const numQuantity = Number(quantity);
+    const numPrice = Number(price);
+    const total = numQuantity * numPrice;
+    
+    // Prepare update data
+    const updateData = { 
+      itemName, 
+      quantity: numQuantity, 
+      price: numPrice, 
+      total, 
+      category 
+    };
+    
+    // If a new picture is uploaded, update the picture field
+    if (req.file) {
+      updateData.picture = `/uploads/${req.file.filename}`;
+    }
+    
     const updateSale = await Sale.findByIdAndUpdate(
       req.params.id,
-      { itemName, quantity, price, total, category },
+      updateData,
       { new: true }
     );
     if (!updateSale) {

@@ -23,12 +23,16 @@ function Sales() {
   const [modalMode, setModalMode] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [picture, setPicture] = useState(null);
+  const [picturePreview, setPicturePreview] = useState("");
   const itemsPerPage = 5;
 
   const resetField = () => {
     setItemName("");
     setPrice("");
     setQuantity("");
+    setPicture(null);
+    setPicturePreview("");
   };
 
   useEffect(() => {
@@ -41,6 +45,10 @@ function Sales() {
   };
 
   const toggleModal = () => {
+    if (modal) {
+      // Reset fields when closing modal
+      resetField();
+    }
     setModal(!modal);
   };
 
@@ -69,6 +77,8 @@ function Sales() {
       setPrice(data.price);
       setQuantity(data.quantity);
       setCategory(data.category ? data.category : categories[0]);
+      setPicturePreview(data.picture ? `http://localhost:5000${data.picture}` : "");
+      setPicture(null);
     } catch (err) {
       console.error("Failed to load sales:", err);
     }
@@ -78,15 +88,23 @@ function Sales() {
     if (!itemName || !price || !quantity) return alert("Fill all fields");
     setLoading(true);
     try {
-      const newSale = await addSale({
-        itemName,
-        price: Number(price),
-        quantity: Number(quantity),
-        category: category ? category : categories[0],
-      });
+      const formData = new FormData();
+      formData.append("itemName", itemName);
+      formData.append("price", Number(price));
+      formData.append("quantity", Number(quantity));
+      const categoryId = category?._id || category || (categories[0]?._id);
+      if (categoryId) {
+        formData.append("category", categoryId);
+      }
+      if (picture) {
+        formData.append("picture", picture);
+      }
+      
+      const newSale = await addSale(formData);
       setSales([newSale, ...sales]);
       setCurrentPage(1); // Reset to first page after adding
       toggleModal();
+      resetField();
     } catch (err) {
       console.error("Failed to add sale:", err);
     } finally {
@@ -106,16 +124,24 @@ function Sales() {
   const handleUpdateSale = async (id) => {
     try {
       setLoading(true);
-      const updated = await updateSale(selectedSale._id, {
-        itemName,
-        quantity,
-        price,
-        category,
-      });
+      const formData = new FormData();
+      formData.append("itemName", itemName);
+      formData.append("quantity", Number(quantity));
+      formData.append("price", Number(price));
+      const categoryId = category?._id || category;
+      if (categoryId) {
+        formData.append("category", categoryId);
+      }
+      if (picture) {
+        formData.append("picture", picture);
+      }
+      
+      const updated = await updateSale(selectedSale._id, formData);
       fetchSales();
       setLoading(false);
       setCurrentPage(1); // Reset to first page after updating
       toggleModal();
+      resetField();
     } catch (err) {
       console.error("Update failed:", err);
       setLoading(false);
@@ -154,6 +180,20 @@ function Sales() {
     };
     // Format: "Dec 25, 2024, 02:30 PM"
     return date.toLocaleString('en-US', options);
+  };
+
+  // Handle picture file selection
+  const handlePictureChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPicture(file);
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPicturePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
   return (
     <motion.div 
@@ -200,6 +240,7 @@ function Sales() {
             <table className="sales-table w-full">
               <thead>
                 <tr>
+                  <th scope="col">Picture</th>
                   <th scope="col">Name</th>
                   <th scope="col">Date</th>
                   <th scope="col">Quantity</th>
@@ -212,7 +253,7 @@ function Sales() {
               <tbody>
                 {filteredSales.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="text-center py-8 text-slate-400">
+                    <td colSpan="8" className="text-center py-8 text-slate-400">
                       {searchTerm
                         ? `No sales found matching "${searchTerm}"`
                         : "No sales recorded yet. Add your first sale!"}
@@ -221,6 +262,19 @@ function Sales() {
                 ) : (
                   paginatedSales.map((s, i) => (
                     <tr key={i} className="hover:bg-slate-50 transition-colors">
+                      <td data-label="Picture">
+                        {s.picture ? (
+                          <img
+                            src={`http://localhost:5000${s.picture}`}
+                            alt={s.itemName}
+                            className="w-12 h-12 md:w-16 md:h-16 object-cover rounded-lg"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 md:w-16 md:h-16 bg-slate-200 rounded-lg flex items-center justify-center">
+                            <i className="fa-solid fa-image text-slate-400"></i>
+                          </div>
+                        )}
+                      </td>
                       <td data-label="Name" className="font-medium text-slate-700">{s.itemName}</td>
                       <td data-label="Date" className="text-sm text-slate-600">
                         <span className="block md:inline">{formatDate(s.date || s.createdAt)}</span>
@@ -384,6 +438,26 @@ function Sales() {
                     </option>
                   ))}
                 </select>
+
+                <label className="text-left text-slate-700 font-medium" htmlFor="picture">
+                  Add Picture (Optional):
+                </label>
+                <input
+                  className="record-input"
+                  type="file"
+                  id="picture"
+                  accept="image/*"
+                  onChange={handlePictureChange}
+                />
+                {picturePreview && (
+                  <div className="mt-2">
+                    <img
+                      src={picturePreview}
+                      alt="Preview"
+                      className="w-32 h-32 object-cover rounded-lg border border-slate-300"
+                    />
+                  </div>
+                )}
 
                 <button className="global-button mt-2" type="submit" disabled={loading}>
                   {loading ? (

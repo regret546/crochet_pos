@@ -8,6 +8,7 @@ const saleSchema = Schema(
     price: { type: Number, required: true },
     total: { type: Number, required: true },
     date: { type: Date, default: Date.now },
+    picture: { type: String, default: "" },
     category: {
       type: Schema.Types.ObjectId,
       ref: "Category",
