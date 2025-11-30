@@ -9,6 +9,7 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import { getCategory } from "../api/categoryApi";
 import { confirmDelete, capitalizeFirstWord } from "../utils";
+import logoImage from "../assets/logo.png";
 
 function Sales() {
   const [itemName, setItemName] = useState("");
@@ -263,17 +264,14 @@ function Sales() {
                   paginatedSales.map((s, i) => (
                     <tr key={i} className="hover:bg-slate-50 transition-colors">
                       <td data-label="Picture">
-                        {s.picture ? (
-                          <img
-                            src={`http://localhost:5000${s.picture}`}
-                            alt={s.itemName}
-                            className="w-12 h-12 md:w-16 md:h-16 object-cover rounded-lg"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 md:w-16 md:h-16 bg-slate-200 rounded-lg flex items-center justify-center">
-                            <i className="fa-solid fa-image text-slate-400"></i>
-                          </div>
-                        )}
+                        <img
+                          src={s.picture ? `http://localhost:5000${s.picture}` : logoImage}
+                          alt={s.itemName}
+                          className="w-12 h-12 md:w-16 md:h-16 object-cover rounded-lg"
+                          onError={(e) => {
+                            e.target.src = logoImage;
+                          }}
+                        />
                       </td>
                       <td data-label="Name" className="font-medium text-slate-700">{s.itemName}</td>
                       <td data-label="Date" className="text-sm text-slate-600">
@@ -449,15 +447,16 @@ function Sales() {
                   accept="image/*"
                   onChange={handlePictureChange}
                 />
-                {picturePreview && (
-                  <div className="mt-2">
-                    <img
-                      src={picturePreview}
-                      alt="Preview"
-                      className="w-32 h-32 object-cover rounded-lg border border-slate-300"
-                    />
-                  </div>
-                )}
+                <div className="mt-2">
+                  <img
+                    src={picturePreview || logoImage}
+                    alt="Preview"
+                    className="w-32 h-32 object-cover rounded-lg border border-slate-300"
+                    onError={(e) => {
+                      e.target.src = logoImage;
+                    }}
+                  />
+                </div>
 
                 <button className="global-button mt-2" type="submit" disabled={loading}>
                   {loading ? (
