@@ -102,10 +102,10 @@ const Category = () => {
   };
 
   return (
-    <div className="w-full min-h-screen p-4 md:p-6 lg:p-8 pt-20 md:pt-4">
+    <div className="w-full min-h-screen p-4 sm:p-6 md:p-8 pt-20 md:pt-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-          <h3 className="text-3xl md:text-4xl font-bold text-slate-800 pl-16 md:pl-0">Manage Category</h3>
+          <h3 className="text-3xl md:text-4xl font-bold text-slate-800">Manage Category</h3>
           <button
             onClick={() => {
               toggleModal();
@@ -164,7 +164,7 @@ const Category = () => {
                             onClick={() => {
                               handleDeleteCategory(cat._id);
                             }}
-                            className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            className="p-2.5 sm:p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                             aria-label="Delete"
                           >
                             <i className="fa-solid fa-trash"></i>
@@ -175,7 +175,7 @@ const Category = () => {
                               setModalMode("edit");
                               toggleModal();
                             }}
-                            className="p-2 text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="p-2.5 sm:p-2 text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                             aria-label="Edit"
                           >
                             <i className="fa-solid fa-pen"></i>
@@ -200,17 +200,18 @@ const Category = () => {
                 <button
                   onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                  className="px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium min-h-[44px] flex items-center justify-center"
                 >
                   <i className="fa-solid fa-chevron-left mr-1"></i>
-                  Previous
+                  <span className="hidden sm:inline">Previous</span>
+                  <span className="sm:hidden">Prev</span>
                 </button>
                 <div className="flex items-center gap-1">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`px-3 py-2 rounded-lg border transition-colors font-medium ${
+                      className={`px-3 py-2 rounded-lg border transition-colors font-medium min-w-[44px] min-h-[44px] flex items-center justify-center ${
                         currentPage === page
                           ? "bg-gradient-to-r from-rose-400 to-lavender-400 text-white border-transparent"
                           : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
@@ -223,7 +224,7 @@ const Category = () => {
                 <button
                   onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                  className="px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium min-h-[44px] flex items-center justify-center"
                 >
                   Next
                   <i className="fa-solid fa-chevron-right ml-1"></i>
@@ -245,7 +246,7 @@ const Category = () => {
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="relative text-center md:max-w-[500px] w-full mx-4 grid bg-white rounded-2xl p-6 md:p-8 shadow-2xl"
+              className="relative text-center md:max-w-[500px] w-full mx-4 max-h-[90vh] overflow-y-auto grid bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-2xl"
             >
               <h2 className="text-2xl font-bold text-slate-800 mb-6">
                 {modalMode == "add" ? "Add" : "Edit"} Category
@@ -276,7 +277,7 @@ const Category = () => {
               </form>
               <button
                 onClick={toggleModal}
-                className="mt-4 p-3 px-6 bg-slate-200 text-slate-700 rounded-xl hover:bg-slate-300 transition-colors font-medium"
+                className="mt-4 p-3 px-6 bg-slate-200 text-slate-700 rounded-xl hover:bg-slate-300 active:scale-95 transition-all font-medium min-h-[44px]"
               >
                 Cancel
               </button>

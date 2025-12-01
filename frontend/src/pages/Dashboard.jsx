@@ -30,9 +30,10 @@ export default function Dashboard() {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        className="md:hidden fixed top-4 left-4 z-50 p-3 bg-gradient-to-r from-rose-400 to-lavender-400 text-white rounded-xl shadow-lg hover:shadow-xl transition-all"
+        className="md:hidden fixed top-4 left-4 z-50 p-3 bg-gradient-to-r from-rose-400 to-lavender-400 text-white rounded-xl shadow-lg hover:shadow-xl active:scale-95 transition-all min-w-[44px] min-h-[44px] flex items-center justify-center"
+        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
       >
-        <i className={`fa-solid ${mobileMenuOpen ? "fa-x" : "fa-bars"}`}></i>
+        <i className={`fa-solid ${mobileMenuOpen ? "fa-x" : "fa-bars"} text-lg`}></i>
       </button>
 
       {/* Mobile Menu Overlay */}
@@ -65,7 +66,7 @@ export default function Dashboard() {
       />
 
       {/* Main Content */}
-      <main className="flex-1 md:ml-0 min-h-screen">
+      <main className="flex-1 md:ml-0 min-h-screen overflow-x-hidden">
         <AnimatePresence mode="wait">
           {selected === "Home" && (
             <motion.div
@@ -180,7 +181,7 @@ const Sidebar = ({ selected, setSelected, handleLogout, mobileMenuOpen, setMobil
             animate={{ x: 0 }}
             exit={{ x: -300 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="md:hidden fixed left-0 top-0 h-full w-[280px] bg-gradient-to-b from-lavender-300 via-rose-300 to-lavender-300 shadow-2xl z-50"
+            className="md:hidden fixed left-0 top-0 h-full w-[280px] max-w-[85vw] bg-gradient-to-b from-lavender-300 via-rose-300 to-lavender-300 shadow-2xl z-50 overflow-y-auto"
           >
             <div className="flex flex-col h-full w-full">
               <div className="flex items-center justify-between p-4 border-b border-white/20">

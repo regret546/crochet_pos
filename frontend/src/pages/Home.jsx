@@ -43,13 +43,13 @@ const Home = ({ setSelected }) => {
   return (
     <motion.div 
       layout 
-      className="w-full p-4 md:p-6 lg:p-8 min-h-screen pt-20 md:pt-4"
+      className="w-full p-4 sm:p-6 md:p-8 min-h-screen pt-20 md:pt-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
       <div className="max-w-7xl mx-auto">
-        <h3 className="text-left text-3xl md:text-4xl font-bold text-slate-800 mb-6 md:mb-8 pl-16 md:pl-0">
+        <h3 className="text-left text-3xl md:text-4xl font-bold text-slate-800 mb-6 md:mb-8">
           Dashboard
         </h3>
         <div className="dashboard grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">

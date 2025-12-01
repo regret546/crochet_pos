@@ -50,10 +50,12 @@
     font-family: "Inter", "Noto Sans", sans-serif;
     letter-spacing: 0.02em;
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%; /* Prevent text size adjustment on iOS */
   }
 
   body {
     @apply bg-gradient-to-br from-cream-50 via-rose-50 to-lavender-50 min-h-screen;
+    overflow-x: hidden; /* Prevent horizontal scroll on mobile */
   }
 
   .input-box {
@@ -62,14 +64,34 @@
 
   .input-box input {
     @apply focus:outline-none p-3 px-4 rounded-xl ring-2 ring-lavender-200 bg-white/90 backdrop-blur-sm text-slate-700 placeholder-slate-400 transition-all duration-200 focus:ring-rose-300 focus:bg-white;
+    font-size: 16px; /* Prevents zoom on iOS */
+    min-height: 44px; /* Minimum touch target */
   }
 
   .record-input {
     @apply focus:outline-none p-3 px-4 rounded-xl ring-2 ring-slate-200 bg-white text-slate-700 placeholder-slate-400 transition-all duration-200 focus:ring-rose-300 focus:bg-white;
+    font-size: 16px; /* Prevents zoom on iOS */
+    min-height: 44px; /* Minimum touch target */
+  }
+
+  select.record-input {
+    @apply appearance-none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+  }
+
+  @media (max-width: 480px) {
+    .input-box input,
+    .record-input {
+      @apply p-2.5 px-3;
+    }
   }
 
   .global-button {
     @apply grid place-items-center p-3 px-6 bg-gradient-to-r from-rose-400 to-lavender-400 text-white cursor-pointer rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 font-medium;
+    min-height: 44px; /* Minimum touch target size for mobile */
   }
 
   .sales-table {
@@ -109,6 +131,13 @@
   /* Responsive table wrapper */
   .table-wrapper {
     @apply overflow-x-auto -mx-4 px-4;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  }
+
+  @media (max-width: 768px) {
+    .table-wrapper {
+      @apply -mx-0 px-0;
+    }
   }
 
   /* Mobile card view for tables */
@@ -122,7 +151,10 @@
     }
 
     .sales-table tbody td {
-      @apply block px-0 py-2 border-0 text-sm;
+      @apply block px-0 py-2.5 border-0 text-sm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .sales-table tbody td:not(:last-child) {
@@ -131,7 +163,53 @@
 
     .sales-table tbody td:before {
       content: attr(data-label);
-      @apply font-semibold text-slate-500 block mb-1 text-xs uppercase tracking-wide;
+      @apply font-semibold text-slate-600 block text-xs uppercase tracking-wide mr-4 flex-shrink-0;
+    }
+
+    /* Stack label and value vertically for complex content */
+    .sales-table tbody td[data-label="Picture"] {
+      @apply flex-col items-start;
+    }
+
+    .sales-table tbody td[data-label="Picture"]:before {
+      @apply mb-2;
+    }
+
+    .sales-table tbody td[data-label="Actions"] {
+      @apply justify-end pt-3 border-t border-slate-200 mt-2;
+    }
+
+    .sales-table tbody td[data-label="Actions"]:before {
+      @apply hidden;
+    }
+
+    .sales-table tbody td[data-label="Date"] {
+      @apply flex-col items-start;
+    }
+  }
+
+  /* Small mobile devices */
+  @media (max-width: 480px) {
+    .dashboard-card {
+      @apply p-4;
+    }
+
+    .dashboard-card h2 {
+      @apply text-3xl;
+    }
+
+    .dashboard-card p {
+      @apply text-sm;
+    }
+
+    .dashboard-card i {
+      @apply text-4xl right-3 top-3;
+    }
+
+    /* Ensure buttons have proper touch targets on small screens */
+    button, .global-button {
+      min-height: 44px;
+      min-width: 44px;
     }
   }
 }
