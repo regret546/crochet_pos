@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { getCategory } from "../api/categoryApi";
 import { confirmDelete, capitalizeFirstWord } from "../utils";
 import logoImage from "../assets/logo.png";
+import SalesChart from "../components/SalesChart";
 
 function Sales() {
   const [itemName, setItemName] = useState("");
@@ -219,6 +220,11 @@ function Sales() {
             <i className="fa-solid fa-plus mr-2"></i>
             Add Sale
           </button>
+        </div>
+
+        {/* Sales Charts Section */}
+        <div className="mb-6">
+          <SalesChart sales={sales} />
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6">
